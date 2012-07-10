@@ -1,0 +1,43 @@
+#!/usr/bin/env php
+<?php
+require_once dirname(__DIR__) . '/vendor/autoload.php';
+
+use Expressive\Parser;
+use Expressive\Exception\OutOfScopeException;
+use Expressive\Exception\ParseTreeNotFoundException;
+use Expressive\Exception\UnknownTokenException;
+
+
+while ((fputs(STDOUT, 'math > ')) && $e = fgets(STDIN)) {
+    if (!($e = trim($e))) {
+        continue;
+    }
+    if (in_array($e, array('quit', 'exit', ':q'))) {
+        break;
+    }
+
+    try {
+        $result = new Parser($e);
+    }
+    catch (UnknownTokenException $exception) {
+        echo 'unknown token exception thrown in expression: ', $e, PHP_EOL;
+        echo 'token: "', $exception->getMessage(), '"', PHP_EOL;
+        continue;
+    }
+    catch (ParseTreeNotFoundException $exception) {
+        echo 'parse tree not found (missing content): ', $e, PHP_EOL;
+        continue;
+    }
+    catch (OutOfScopeException $exception) {
+        echo 'out of scope exception thrown in: ', $e, PHP_EOL;
+        echo 'you should probably count your parentheses', PHP_EOL;
+        continue;
+    }
+    catch (\Exception $exception) {
+        echo 'unknown exception thrown: ', $e, PHP_EOL;
+        echo $exception->getMessage(), PHP_EOL;
+        continue;
+    }
+
+    echo (string) $result, PHP_EOL;
+}

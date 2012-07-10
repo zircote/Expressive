@@ -17,6 +17,8 @@ class SinScope extends Scope
      */
     public function evaluate()
     {
-        return sin(deg2rad(parent::evaluate()));
+        $value = parent::evaluate();
+        $value = deg2rad($value);
+        return sin($value);
     }
 }

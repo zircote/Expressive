@@ -1,0 +1,17 @@
+{
+    "name": "zircote/Factory",
+    "description": "Blah",
+    "authors": [
+        {
+            "name": "Robert Allen",
+            "email": "zircote@gmail.com"
+        }
+    ],
+    "require": {
+    },
+    "autoload":{
+        "psr-0":{
+            "Expressive":"library"
+        }
+    }
+}

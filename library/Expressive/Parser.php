@@ -45,6 +45,16 @@ class Parser
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->tokenize()
+            ->parse()
+            ->evaluate();
+    }
+
+    /**
      *
      * @return Parser
      */
@@ -56,7 +66,7 @@ class Parser
         $this->expression = str_ireplace('pi', (string)pi(), $this->expression);
         $this->expression = str_replace('**', '^', $this->expression);
         $this->tokens     = preg_split(
-            '@([\d\.]+)|tan\(|sqrt\(||(sin\(|cos\(\+|\-|\*|/|\^|\(|\))@',
+            '@([\d\.]+)|exp\(|sqrt\(|(sin\(|cos\(|tan\(|\+|\-|\*|/|\^|\(|\))@',
             $this->expression,
             null,
             PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY

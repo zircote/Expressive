@@ -13,6 +13,7 @@ class SqrtScope extends Scope
      */
     public function evaluate()
     {
-        return sqrt(parent::evaluate());
+        $value = parent::evaluate();
+        return sqrt($value);
     }
 }

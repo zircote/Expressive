@@ -11,13 +11,15 @@ namespace Expressive\Context;
  * @category
  * @subcategory
  */
-class CosineScope extends Scope
+class CosScope extends Scope
 {
     /**
      * @return bool|float|mixed
      */
     public function evaluate()
     {
-        return cos(deg2rad(parent::evaluate()));
+        $value = parent::evaluate();
+        $value = deg2rad($value);
+        return cos($value);
     }
 }
