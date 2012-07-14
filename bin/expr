@@ -7,37 +7,48 @@ use Expressive\Exception\OutOfScopeException;
 use Expressive\Exception\ParseTreeNotFoundException;
 use Expressive\Exception\UnknownTokenException;
 
+$green   = "\033[1;32m";
+$red     = "\033[1;31m";
+$white   = "\033[1;28m";
+$nocolor = "\033[0m";
 
-while ((fputs(STDOUT, 'math > ')) && $e = fgets(STDIN)) {
+$result = null;
+echo $white , 'ans for last answer ex: ans+2', PHP_EOL, 'q, exit, quit to exit', PHP_EOL;
+while ((fputs(STDOUT, $white . 'math > ' . $nocolor)) && $e = fgets(STDIN)) {
     if (!($e = trim($e))) {
         continue;
     }
-    if (in_array($e, array('quit', 'exit', ':q'))) {
+    if (in_array($e, array( 'quit', 'exit', ':q' ))) {
         break;
     }
 
     try {
-        $result = new Parser($e);
+        $parser = new Parser(str_replace('ans', $result, $e));
+        $parser->setThrowExceptions();
+        $result = $parser->getResult();
     }
     catch (UnknownTokenException $exception) {
-        echo 'unknown token exception thrown in expression: ', $e, PHP_EOL;
-        echo 'token: "', $exception->getMessage(), '"', PHP_EOL;
+        echo $red .
+            'unknown token exception thrown in expression: ', $e, $nocolor, PHP_EOL;
+        echo $red . 'token: "', $exception->getMessage(
+        ), '"', $nocolor, PHP_EOL;
         continue;
     }
     catch (ParseTreeNotFoundException $exception) {
-        echo '_parse tree not found (missing content): ', $e, PHP_EOL;
+        echo $red .
+            '_parse tree not found (missing content): ', $e, $nocolor, PHP_EOL;
         continue;
     }
     catch (OutOfScopeException $exception) {
-        echo 'out of scope exception thrown in: ', $e, PHP_EOL;
-        echo 'you should probably count your parentheses', PHP_EOL;
+        echo $red . 'out of scope exception thrown in: ', $e, $nocolor, PHP_EOL;
+        echo $red .
+            'you should probably count your parentheses', $nocolor, PHP_EOL;
         continue;
     }
     catch (\Exception $exception) {
-        echo 'unknown exception thrown: ', $e, PHP_EOL;
-        echo $exception->getMessage(), PHP_EOL;
+        echo $red . 'unknown exception thrown: ', $e, $nocolor, PHP_EOL;
+        echo $red . $exception->getMessage(), $nocolor, PHP_EOL;
         continue;
     }
-
-    echo (string) $result, PHP_EOL;
+    echo (string)$green, $result, $nocolor, PHP_EOL;
 }
