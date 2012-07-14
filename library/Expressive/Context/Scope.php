@@ -1,47 +1,57 @@
 <?php
 namespace Expressive\Context;
 /**
- * @package
- * @category
- * @subcategory
+ * @package  Expressive
+ * @category Context
  */
-use \Expressive\Exception\OutOfScopeException;
-use \Expressive\Exception\UnknownTokenException;
-use \Expressive\Parser;
+use Expressive\Exception\OutOfScopeException;
+use Expressive\Exception\UnknownTokenException;
+use Expressive\Parser;
 
 /**
- * @package
- * @category
- * @subcategory
+ * @package  Expressive
+ * @category Context
  */
 class Scope implements ContextInterface
 {
+
     /**
      * @var Parser
      */
     protected $builder = null;
+
     /**
      * @var array
      */
     protected $childrenContexts = array();
+
     /**
      * @var array
      */
     protected $raw = array();
+
     /**
      * @var array
      */
     protected $ops = array();
 
-    const T_NUM   = 1;
-    const T_OP    = 2;
+    const T_NUM = 1;
+
+    const T_OP = 2;
+
     const T_SCOPE = 3;
+
     const T_CLOSE = 4;
-    const T_SIN   = 5;
-    const T_COS   = 6;
-    const T_TAN   = 7;
-    const T_SQRT  = 8;
-    const T_EXP   = 9;
+
+    const T_SIN = 5;
+
+    const T_COS = 6;
+
+    const T_TAN = 7;
+
+    const T_SQRT = 8;
+
+    const T_EXP = 9;
 
     /**
      * @param Parser $builder
@@ -52,31 +62,24 @@ class Scope implements ContextInterface
     }
 
     /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return implode('', $this->raw);
-    }
-
-    /**
      * @param $operation
      */
     public function addOp($operation)
     {
-        $this->ops[] = $operation;
+        $this->ops[ ] = $operation;
     }
 
     /**
      *
      * @param $token
+     *
      * @throws \Expressive\Exception\UnknownTokenException
      * @throws \Expressive\Exception\OutOfScopeException
      */
     public function handleToken($token)
     {
         $type = null;
-        if (in_array($token, array('*', '/', '+', '-', '^'))) {
+        if (in_array($token, array( '*', '/', '+', '-', '^' ))) {
             $type = self::T_OP;
         }
         if ($token === ')') {
@@ -100,17 +103,18 @@ class Scope implements ContextInterface
         if ($token === 'exp(') {
             $type = self::T_EXP;
         }
-
         if (is_null($type)) {
             if (is_numeric($token)) {
-                $type  = self::T_NUM;
+                $type = self::T_NUM;
                 $token = (float)$token;
+            } else {
+                throw new \UnexpectedValueException('unacceptable value');
             }
         }
         switch ($type) {
             case self::T_NUM:
             case self::T_OP:
-                $this->ops[] = $token;
+                $this->ops[ ] = $token;
                 break;
             case self::T_SCOPE:
                 $this->builder->pushContext(new Scope());
@@ -131,7 +135,7 @@ class Scope implements ContextInterface
                 $this->builder->pushContext(new ExpScope());
                 break;
             case self::T_CLOSE:
-                $operation  = $this->builder->popContext();
+                $operation = $this->builder->popContext();
                 $newContext = $this->builder->getContext();
                 if (is_null($operation) || (!$newContext)) {
                     throw new OutOfScopeException();
@@ -152,30 +156,31 @@ class Scope implements ContextInterface
      * - addi/subt, third order
      *
      * @param $operationList
+     *
      * @return bool|mixed
      */
     protected function _expressionLoop(& $operationList)
     {
         while (list($i, $operation) = each($operationList)) {
-            if (!in_array($operation, array('^', '*', '/', '+', '-'))) {
+            if (!in_array($operation, array( '^', '*', '/', '+', '-' ))) {
                 continue;
             }
 
-            $left         = isset($operationList[$i - 1]) ?
-                (float)$operationList[$i - 1] : null;
-            $right        = isset($operationList[$i + 1]) ?
-                (float)$operationList[$i + 1] : null;
-            $first_order  = (in_array('^', $operationList));
+            $left = isset($operationList[ $i - 1 ]) ?
+                (float)$operationList[ $i - 1 ] : null;
+            $right = isset($operationList[ $i + 1 ]) ?
+                (float)$operationList[ $i + 1 ] : null;
+            $first_order = (in_array('^', $operationList));
             $second_order = (in_array('*', $operationList) ||
                              in_array('/', $operationList));
-            $third_order  = (in_array('-', $operationList) ||
-                             in_array('+', $operationList));
+            $third_order = (in_array('-', $operationList) ||
+                            in_array('+', $operationList));
 
             $remove_sides = true;
             if ($first_order) {
                 switch ($operation) {
                     case '^':
-                        $operationList[$i] = pow((float)$left, (float)$right);
+                        $operationList[ $i ] = pow((float)$left, (float)$right);
                         break;
                     default:
                         $remove_sides = false;
@@ -184,10 +189,10 @@ class Scope implements ContextInterface
             } elseif ($second_order) {
                 switch ($operation) {
                     case '*':
-                        $operationList[$i] = (float)($left * $right);
+                        $operationList[ $i ] = (float)($left * $right);
                         break;
                     case '/':
-                        $operationList[$i] = (float)($left / $right);
+                        $operationList[ $i ] = (float)($left / $right);
                         break;
                     default:
                         $remove_sides = false;
@@ -196,10 +201,10 @@ class Scope implements ContextInterface
             } elseif ($third_order) {
                 switch ($operation) {
                     case '+':
-                        $operationList[$i] = (float)($left + $right);
+                        $operationList[ $i ] = (float)($left + $right);
                         break;
                     case '-':
-                        $operationList[$i] = (float)($left - $right);
+                        $operationList[ $i ] = (float)($left - $right);
                         break;
                     default:
                         $remove_sides = false;
@@ -208,7 +213,7 @@ class Scope implements ContextInterface
             }
 
             if ($remove_sides) {
-                unset($operationList[$i + 1], $operationList[$i - 1]);
+                unset($operationList[ $i + 1 ], $operationList[ $i - 1 ]);
                 reset($operationList = array_values($operationList));
             }
         }
@@ -228,7 +233,7 @@ class Scope implements ContextInterface
         foreach ($this->ops as $i => $operation) {
             if (is_object($operation)) {
                 /** @var Scope $operation */
-                $this->ops[$i] = $operation->evaluate();
+                $this->ops[ $i ] = $operation->evaluate();
             }
         }
 
@@ -236,7 +241,7 @@ class Scope implements ContextInterface
 
         while (true) {
             $operationCheck = $operationList;
-            $result         = $this->_expressionLoop($operationList);
+            $result = $this->_expressionLoop($operationList);
             if ($result !== false) {
                 return $result;
             }
@@ -246,6 +251,5 @@ class Scope implements ContextInterface
                 reset($operationList = array_values($operationList));
             }
         }
-        throw new \Exception(__METHOD__);
     }
 }

@@ -25,7 +25,7 @@ while ((fputs(STDOUT, 'math > ')) && $e = fgets(STDIN)) {
         continue;
     }
     catch (ParseTreeNotFoundException $exception) {
-        echo 'parse tree not found (missing content): ', $e, PHP_EOL;
+        echo '_parse tree not found (missing content): ', $e, PHP_EOL;
         continue;
     }
     catch (OutOfScopeException $exception) {

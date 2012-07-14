@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Expressive" default="build" basedir=".">
+    <property name="source" value="." />
+    <target name="clean" description="Cleans the Jobs targets">
+        <exec executable="rm" failonerror="false">
+            <arg line="-rfv" />
+            <arg line="composer.phar"/>
+            <arg line="composer.lock"/>
+            <arg line="vendor"/>
+        </exec>
+    </target>
+    <target name="phpunit"
+        description="Run unit tests using PHPUnit">
+        <exec executable="phpunit" failonerror="true">
+            <arg line="-c tests/phpunit.xml" />
+        </exec>
+    </target>
+    <target name="purge"
+            description="removes composer installed files from environment">
+        <delete dir="${basedir}/build/api"/>
+        <delete dir="${basedir}/build/code-browser"/>
+        <delete dir="${basedir}/build/coverage"/>
+        <delete dir="${basedir}/build/logs"/>
+        <delete dir="${basedir}/build/pdepend"/>
+        <exec executable="rm" failonerror="false">
+            <arg line="-rf"/>
+            <arg line="composer.lock"/>
+            <arg line="vendor"/>
+        </exec>
+    </target>
+    <target name="setup" description="Clean up and create artifact directories">
+        <exec executable="wget" failonerror="true">
+        <arg line="http://getcomposer.org/composer.phar" />
+        </exec>
+        <exec executable="php" failonerror="true">
+            <arg line="composer.phar install"/>
+        </exec>
+    </target>
+    <target name="phpunit-cover"
+            description="Run unit tests using PHPUnit and generates junit.xml and clover.xml">
+        <exec executable="phpunit" failonerror="true">
+            <arg line="-c build/phpunit.xml"/>
+        </exec>
+    </target>
+
+    <target name="parallelTasks"
+            description="Run the pdepend, phpmd, phpcpd, phpcs, phpdoc and phploc tasks in parallel using a maximum of 2 threads.">
+        <parallel threadCount="2">
+            <sequential>
+                <antcall target="pdepend"/>
+                <antcall target="phpmd"/>
+            </sequential>
+            <antcall target="phpcpd"/>
+            <antcall target="phpcs"/>
+            <antcall target="phploc"/>
+            <antcall target="phpdoc"/>
+        </parallel>
+    </target>
+
+    <target name="pdepend"
+            description="Generate jdepend.xml and software metrics charts using PHP_Depend">
+        <exec executable="pdepend">
+            <arg line="--jdepend-xml=build/logs/jdepend.xml"/>
+            <arg line="--jdepend-chart=build/pdepend/dependencies.svg"/>
+            <arg line="--overview-pyramid=build/pdepend/overview-pyramid.svg"/>
+            <arg line="${source}/library,${source}/application"/>
+        </exec>
+    </target>
+
+    <target name="phpmd" description="Generate pmd.xml using PHPMD">
+        <exec executable="phpmd">
+            <arg line="application/,library/"/>
+            <arg line="xml"/>
+            <arg line="build/phpmd.xml"/>
+            <arg line="--reportfile build/logs/pmd.xml"/>
+            <arg line="--exclude vendor/,doc/,scripts/,build/,tests/,data/,public/"/>
+            <arg line="--suffixes php"/>
+        </exec>
+    </target>
+    <target name="phpmd-dev" description="Generate pmd.xml using PHPMD">
+        <exec executable="phpmd">
+            <arg line="application/,library/"/>
+            <arg line="text"/>
+            <arg line="build/phpmd.xml"/>
+            <arg line="--exclude vendor/,doc/,scripts/,build/,tests/,data/,public/"/>
+            <arg line="--suffixes php"/>
+        </exec>
+    </target>
+
+    <target name="phpcpd" description="Generate pmd-cpd.xml using PHPCPD">
+        <exec executable="phpcpd">
+            <arg line="--log-pmd build/logs/pmd-cpd.xml"/>
+            <arg line="--suffixes php,phtml"/>
+            <arg line="--exclude vendor/,doc/,scripts/,build/,tests/,data/,public/"/>
+            <arg line="${source}"/>
+        </exec>
+    </target>
+    <target name="phpcpd-dev" description="Generate pmd-cpd.xml using PHPCPD">
+        <exec executable="phpcpd">
+            <arg line="--exclude vendor/,doc/,scripts/,build/,tests/,data/,public/"/>
+            <arg line="--suffixes php,phtml"/>
+            <arg line="${source}"/>
+        </exec>
+    </target>
+
+    <target name="phploc" description="Generate phploc.csv">
+        <exec executable="phploc">
+            <arg line="--log-csv build/logs/phploc.csv"/>
+            <arg line="--exclude vendor/,doc/,scripts/,build/,tests/,data/,public/"/>
+            <arg line="${source}"/>
+        </exec>
+    </target>
+
+    <target name="phploc-dev" description="Generate phploc.csv">
+        <exec executable="phploc">
+            <arg line="--exclude vendor/,doc/,scripts/,build/,tests/,data/,public/"/>
+            <arg line="${source}"/>
+        </exec>
+    </target>
+    <target name="phpcs"
+            description="Generate checkstyle.xml using PHP_CodeSniffer">
+        <exec executable="phpcs">
+            <arg line="--report=checkstyle"/>
+            <arg line="--report-file=build/logs/checkstyle.xml"/>
+            <arg line="--standard=build/phpcs.xml"/>
+            <arg line="--extensions=php,phtml"/>
+            <arg line="--warning-severity=8"/>
+            <arg line="${source}"/>
+        </exec>
+    </target>
+
+    <target name="phpcs-dev"
+            description="Generate checkstyle.xml using PHP_CodeSniffer">
+        <exec executable="phpcs">
+            <arg line="--standard=build/phpcs.xml"/>
+            <arg line="--extensions=php,phtml"/>
+            <arg line="--warning-severity=8"/>
+            <arg line="${source}"/>
+        </exec>
+    </target>
+
+    <target name="phpdoc"
+            description="Generate API documentation using PHPDoc2">
+        <exec executable="phpdoc">
+            <arg line="-d ${source}"/>
+            <arg line="-t build/api"/>
+            <arg line="-i vendor/"/>
+            <arg line="-i build/"/>
+            <arg line="-i scripts/"/>
+            <arg line="-i docs/"/>
+        </exec>
+    </target>
+
+    <target name="phpcb"
+            description="Aggregate tool output with PHP_CodeBrowser">
+        <exec executable="phpcb">
+            <arg line="--log build/logs"/>
+            <arg line="--source ${source}"/>
+            <arg line="--output build/code-browser"/>
+        </exec>
+    </target>
+    <target name="build" depends="setup,phpunit,clean" />
+</project>

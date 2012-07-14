@@ -1,15 +1,12 @@
 <?php
 namespace Expressive\Exception;
 /**
- * @package
- * @category
- * @subcategory
- * Date: 7/10/12T9:16 AM
+ * @package  Expressive
+ * @category Exception
  */
 /**
- * @package
- * @category
- * @subcategory
+ * @package  Expressive
+ * @category Exception
  */
 class ParseTreeNotFoundException extends \Exception
 {

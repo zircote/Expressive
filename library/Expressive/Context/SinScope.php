@@ -1,14 +1,12 @@
 <?php
-/**
- * @package
- * @category
- * @subcategory
- */
 namespace Expressive\Context;
 /**
- * @package
- * @category
- * @subcategory
+ * @package  Expressive
+ * @category Context
+ */
+/**
+ * @package  Expressive
+ * @category Context
  */
 class SinScope extends Scope
 {

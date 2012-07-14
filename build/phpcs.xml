@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<ruleset name="Zend Standard">
+    <description>Zend Standard, exclude extraneous</description>
+    <exclude-pattern>*/tests/*</exclude-pattern>
+    <exclude-pattern>*/db/*</exclude-pattern>
+    <exclude-pattern>*.js</exclude-pattern>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*.css</exclude-pattern>
+    <rule ref="Zend"/>
+</ruleset>

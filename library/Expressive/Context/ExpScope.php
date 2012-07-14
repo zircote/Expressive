@@ -1,15 +1,12 @@
 <?php
 namespace Expressive\Context;
 /**
- * @package
- * @category
- * @subcategory
- * Date: 7/10/12T12:40 PM
+ * @package  Expressive
+ * @category Context
  */
 /**
- * @package
- * @category
- * @subcategory
+ * @package  Expressive
+ * @category Context
  */
 class ExpScope extends Scope
 {

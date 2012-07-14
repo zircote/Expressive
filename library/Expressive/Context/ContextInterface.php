@@ -1,10 +1,12 @@
 <?php
 namespace Expressive\Context;
 /**
- * @package
- * @category
- * @subcategory
- * Date: 7/10/12T9:17 AM
+ * @package  Expressive
+ * @category Context
+ */
+/**
+ * @package  Expressive
+ * @category Context
  */
 interface ContextInterface
 {

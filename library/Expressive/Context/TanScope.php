@@ -1,15 +1,12 @@
 <?php
-/**
- * @package
- * @category
- * @subcategory
- * Date: 7/10/12T11:06 AM
- */
 namespace Expressive\Context;
 /**
- * @package
- * @category
- * @subcategory
+ * @package  Expressive
+ * @category Context
+ */
+/**
+ * @package  Expressive
+ * @category Context
  */
 class TanScope extends Scope
 {

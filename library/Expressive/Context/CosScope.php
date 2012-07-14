@@ -1,15 +1,12 @@
 <?php
 namespace Expressive\Context;
 /**
- * @package
- * @category
- * @subcategory
- * Date: 7/10/12T11:06 AM
+ * @package  Expressive
+ * @category Context
  */
 /**
- * @package
- * @category
- * @subcategory
+ * @package  Expressive
+ * @category Context
  */
 class CosScope extends Scope
 {

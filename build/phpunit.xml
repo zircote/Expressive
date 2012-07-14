@@ -1,0 +1,33 @@
+<phpunit bootstrap="../tests/bootstrap.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="false"
+         convertWarningsToExceptions="true"
+         stopOnFailure="false"
+         syntaxCheck="true">
+    <testsuite name="Cautela Application Test Suite">
+        <directory>../tests</directory>
+    </testsuite>
+    <logging>
+        <log type="coverage-html" target="coverage" title="Cautela"
+             logIncompleteSkipped="true"
+             charset="UTF-8" yui="true" highlight="true" lowUpperBound="35"
+             highLowerBound="70"/>
+        <log type="coverage-clover" target="logs/clover.xml"
+             showUncoveredFiles="true"/>
+        <log type="junit" target="logs/junit.xml" logIncompleteSkipped="false"/>
+    </logging>
+    <filter>
+        <blacklist>
+            <directory suffix=".php">../</directory>
+        </blacklist>
+        <whitelist>
+            <directory suffix=".php">../library</directory>
+            <directory suffix=".php">../application</directory>
+            <exclude>
+                <directory suffix=".phtml">../</directory>
+                <file>./bootstrap.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
