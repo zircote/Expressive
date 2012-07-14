@@ -1,13 +1,21 @@
 {
-    "name": "zircote/Factory",
-    "description": "Blah",
+    "name": "zircote/expressive",
+    "description": "A PHP textual expression parser, parses strings for mathematical expressions and returns the result",
+    "bin": ["bin/expr"],
     "authors": [
         {
             "name": "Robert Allen",
             "email": "zircote@gmail.com"
         }
     ],
-    "require": {
+    "require":{
+
+    },
+    "require-dev" :{
+
+    },
+    "config": {
+        "bin-dir": "bin"
     },
     "autoload":{
         "psr-0":{
