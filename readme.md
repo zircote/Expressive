@@ -35,7 +35,7 @@ Supported Operations:
  - `+` addition `2+2`
  - `-` substraction `4-2`
  - `/` division `4/2`
- - `*` multiplication `2*2
+ - `*` multiplication `2*2`
  - `^` exponential `2^2`
  - `sin` sine `sin(60)`
  - `cos` cosine `cos(90)`
