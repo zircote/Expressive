@@ -42,3 +42,5 @@ Supported Operations:
  - `tan` tangent `tan(45)`
  - `sqrt` square root `sqrt(4)`
  - `exp` exponent `exp(12)`
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/zircote/expressive/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
